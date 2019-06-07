@@ -1,0 +1,40 @@
+Intallation Guide : Release name: The Dark Tower Adventures
+
+Prerequisites:
+  Must be running Mystic, which make sense, as the program is an MPL. :)
+
+
+Installation:
+  Create the directory 'rcstdta' in your Mystic Sciripts directory (/mystic/scripts/rcstdta)
+    This directory will contain all the data, ansi, etc, files. 
+
+  Copy all files except rcstdta.mps into this directory
+
+  Copy the rcstdta.mps file into your Scripts directory
+
+  Compile the MPS file:
+
+    Windows:
+      cd \mystic\scripts\
+      mplc rcstdta
+
+    Linux:
+      cd /mystic/scripts/
+      ./mplc rcstdta
+
+  Create a menu option on the menu of your choice:
+
+  Display Text  (E) The Dark Tower Adventures
+  LightBar Low  (E) The Dark Tower Adventures
+  LightBar High (E) The Dark Tower Adventures
+  Hit Key       E
+  Access
+  Display Type  Access
+  X Y           0  0
+  Timer         0
+  Timer Type    Interval       Redraw  Yes
+  Command---------------------Access---------Data----------------------------------
+  (NA) Set node action                       Playing The Dark Tower Adventures
+  (GX) Execute MPL program                   rcstdta
+
+

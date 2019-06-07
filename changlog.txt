@@ -1,0 +1,49 @@
+01Jun v0.01a
+Opened officially for early alpha testing
+
+02Jun v0.02a
+The (S)tats are now available from the fight menu
+Colors should now be easier to read
+Corrected incorrect information being shown during random events
+Increased the chances of random events (good and bad)
+Assorted bug fixes
+
+03Jun v0.03a
+Added user battles!
+Fixed cosmetic error in finding/losing health via random events
+Changed loseweapon and losearmour random events to just degrade one level
+Added enemy attack when player tries to run away from battle
+Changed the date check to check for month and year
+Added interest to the gold in bank (Not daily, but added each day the player plays)
+
+04Jun v0.04a
+Added ANSI screen for daily news. (It's a newspaper)
+Changed the color of the text to display on daily news
+Added 'Last Play' date to the stats screen
+Started working on changing enemies (levels 1-3 complete)
+Decreased Lobstrosity's strength and hitpoints
+Fixed random events where it showed the wrong armour/weapon
+Fixed random event timing. They appear more often now
+Changed random events to account for min/max weapon/armour
+Optimized code and reduced redundant code
+
+05Jun
+Fixed issue in weapon/armour shops where it would force player out after selling
+Changed the color of the 'DEAD' indication on the user listings
+Fixed issue with having to hit 'R' multiple times to exit the tower
+
+06Jun v0.05a
+found bug where user could fight themselves to gain exp - fixed
+Added info to player as to why they can't fight certain users
+Added score file output in ascii format
+Added defense to the Masters which required a rebuild of the Master database
+Adjusted the formula for fighting Masters - It seemed a bit too easy... :)
+Changed so when fighting Master, you wouldn't hit for negative damage
+Added 'Times Won' to the stat screen
+Reduced the number of turns per day to 25
+Reduced the number of human fights per day to 5
+Added some incentive for players who beat the game - higher weapon/armour on restart
+
+07Jun 
+If player died while fighting master, it would keep the player at the higher floor.
+
