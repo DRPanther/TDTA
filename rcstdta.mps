@@ -46,9 +46,13 @@
 Uses Cfg
 Uses User
 
-Const pz = '|[X01|[Y24|01<|09MORE|01>'
+Const
+  pz = '|[X01|[Y24|01<|09MORE|01>'
+  dailyfights = 25
+  dailyhumanfights = 5
 
-Type PlyrRec = Record             //modified from LORD structs
+
+Type PlyrRec = Record         //modified from LORD structs
   Index        : Integer      //index number for storing player data
   Name         : String[40]
   Alias        : String[40]
@@ -65,7 +69,7 @@ Type PlyrRec = Record             //modified from LORD structs
   strength     : longint      //{total strength}
   level        : Byte         //{level of player}                   //changed to byte
   floor        : Byte         //which floor the player is on
-  time         : longint      //{day # that player last played on}  //changed to longint
+  time         : longint      //player last played on}              //changed to longint
   arm          : string[20]   //{armour name}
   arm_num      : byte         //{armour number}                     //changed to byte
   dead         : Boolean      //changed to boolean
@@ -834,8 +838,8 @@ Begin
   Plyr.weapon_num:=Plyr.king+1
   Plyr.weapon:=weapons[Plyr.weapon_num].name
   Plyr.seen_master:=false
-  Plyr.fights_left:=25
-  Plyr.human_left:=5
+  Plyr.fights_left:=dailyfights
+  Plyr.human_left:=dailyhumanfights
   Plyr.gold:=500
   Plyr.bank:=0
   Plyr.def:=1
@@ -1751,24 +1755,7 @@ Begin
   ClrScr
   Plyr.time:=datetime
   SavePlyr(Plyr.index)
-  if not FileExist(rcspath+'town.ans') then
-  Begin
-    WriteLn('|09  The Dark Tower - |03Town')
-    WriteLn('|09-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-')
-    WriteLn('|09  The streets are crowded, it is difficult to')
-    WriteLn('|09  push your way through the mob....')
-    WriteLn('')
-    WriteLn('|09  (|03F|09)ollow the Beam')
-    WriteLn('|09  (|03K|09)ick A$$ Weapons                        (|03A|09)rmour Shop')
-    WriteLn('|09  (|03H|09)eal                                    (|03V|09)iew your stats')
-    WriteLn('|09  (|03Y|09)e Olde Bank                            (|03L|09)ist Warriors')
-    WriteLn('|09  (|03D|09)aily News                              (|03U|09)ser Battles')
-    WriteLn('|09  (|10Q|09)uit to Fields')
-    WriteLn('')
-    WriteLn('|03  The Town')
-    WriteLn('|08  (F,K,A,H,V,Y,L,D,Q)')
-  End
-  Else DispFile(rcspath+'town.ans')
+  DispFile(rcspath+'town.ans')
   WriteLn('')
   Write('|03  Y|09our command, |03'+Plyr.Alias+' : ')
   ch := upper(OneKey('FAKDLHVQYU',True))
@@ -1833,8 +1820,8 @@ Begin
   Plyr.weapon_num:=Plyr.king+1
   Plyr.weapon:=weapons[Plyr.weapon_num].name
   Plyr.seen_master:=false
-  Plyr.fights_left:=25
-  Plyr.human_left:=5
+  Plyr.fights_left:=dailyfights
+  Plyr.human_left:=dailyhumanfights
   Plyr.gold:=500
   Plyr.bank:=0
   Plyr.def:=1
