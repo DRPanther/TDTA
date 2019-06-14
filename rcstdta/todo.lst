@@ -2,6 +2,10 @@ Place weapons/armour in data file
 Find out about IGM support
 InterBBS support?
 <<<<<<< HEAD
+Add items to Restaurant
+Add items to shop
+=======
+<<<<<<< HEAD
 =======
 Add items to Restaurant
 Add items to shop
@@ -14,8 +18,47 @@ Add Pawn Shop, where player can sell items
 Add events which will need specific items
 Give some items a 'use' for the player... (add hp or str?)
 >>>>>>> 111577a... Update install file and added conversion MPL
+>>>>>>> master
 
+1) Apparent God mode for NPC's:                                              
+So I was looking following the beam and looking for things to fight, and     
+after say 10 minutes of playing the game, everything I found that I could    
+attack would not lose any health, yet I would lose health. Not sure how you  
+algorithmised it, but I think something may have gone wobly as I attacked a  
+can and each time I attacked it, it lost 0 health even though I hit it, and I
+would lose health. I have had to run away from a can several times just to   
+heal and quit, then reload the game to continue fighting =)                  
 
--=>require player file update<=-
-Add an Inn for people to get a room
-Add interest increase for players who restart
+3) Not enough moves to play each day at any length...                          
+So each day I have had this on my system, I log in and play it, and follow     
+the beam and try and kill a bunch of stuff to raise funds, healing myself as   
+and when I need to, this lasts about 5-7 minutes until I am out of moves, and  
+then it kicks me out to the main town which means that all I can do now is     
+fight a master, so I fight the master and instantly go up a level (due to my   
+kick ass armour and weapon purchased with the above bonus/glitch).             
+                                                                               
+1) more shops, it's great to be able to spend your loot on weapons and        
+armour, but it would also be cool to be able to buy other things, that may or 
+may not be beneficial, like for example have a pie shop where you can buy     
+food that can be consumed to raise health a little for each item eaten, a     
+clothing shop that sells shoes/boots and hats etc, each item may increase or  
+decrease your defense health a little, or maybe even a newsagents where you   
+could by a newspaper that contains the news from another BBS that's connected 
+to the InterBBS version of the game =)                                        
+
+2) Items that can be joined to create other items of value, eg, you find a    
+steel bracelet, you find another steel bracelet later, if you hold two        
+steel bracelets together you can join them to create handcuffs, these         
+handcuffs can be used to restrain NPC's to loot them without killing them, or 
+perhaps you could find rings dotted about the realm, and once you collect 5   
+rings you can wear all 5 on one hand to give you some extra power or skill,   
+but if one ring gets knocked off in battle the gained skill/power is lost     
+until you find the ring again.                                                
+                                                                              
+3) side missions, like perhaps you might come across a groany old man, who     
+just wants to find a picture of his not too recently departed sister for       
+example but he's mislaid it, and if you help him find it you gain something    
+for your trouble, that perhaps would be useful or even necessary to defeat a   
+later master, perhaps some knowledge of a way to defeat a master more easily.  
+                                                                               
+

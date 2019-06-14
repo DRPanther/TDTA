@@ -1,11 +1,16 @@
 //
 <<<<<<< HEAD
+//  Program: The Dark Tower Adventures v0.06a
+//     Date: 06/13/2019
+=======
+<<<<<<< HEAD
 //  Program: The Dark Tower Adventures v0.05a
 //     Date: 05/27/2019
 =======
 //  Program: The Dark Tower Adventures v0.06a
 //     Date: 06/13/2019
 >>>>>>> 111577a... Update install file and added conversion MPL
+>>>>>>> master
 //   Author: Dan Richter, aka Black Panther of Castle Rock BBS
 //  Contact: Black Panther at Castle Rock BBS
 //   telnet://bbs.castlerockbbs.com
@@ -45,7 +50,8 @@
 //  Done   Generate a score file output
 //  Some   Menus should be in a repeat-until loop
 //         See if I can figure out how to add IGM support
-//  Done   Add some benefit to having beaten the game...
+//  Done   Add some benefit to having beaten the game... Interest multiplier
+//         Add help screens
 //
 
 Uses Cfg
@@ -53,15 +59,22 @@ Uses User
 
 Const
   pz = '|[X01|[Y24|01<|09MORE|01>'
-  dailyfights = 25
+  dailyfights = 50
   dailyhumanfights = 5
 
+<<<<<<< HEAD
+type ritems = Record
+  iname       : string
+  ihit_points : integer
+  ihit_max    : integer
+=======
 <<<<<<< HEAD
 =======
 type ritems = Record
   iname       : string
   ihit_points : integer
   ihit_max    : integer  //Remove - Don't change the hit_max variable...
+>>>>>>> master
   ihit_multi  : real
   ifights_left: byte
   ihuman_left : byte
@@ -69,14 +82,18 @@ type ritems = Record
   idef_multi  : real
   istr_multi  : real
 End
+<<<<<<< HEAD
+=======
 >>>>>>> 111577a... Update install file and added conversion MPL
+>>>>>>> master
 
 Type PlyrRec = Record         //modified from LORD structs
   Index        : Integer      //index number for storing player data
-  Name         : String[40]
-  Alias        : String[40]
+  Name         : String[40]   //Real Name
+  Alias        : String[40]   //Player Alias
   hit_points   : longint      //{player hit points}
   hit_max      : longint      //{hit_point max}
+  hit_multi    : real         //hit_max Multiplier
   weapon_num   : byte         //{weapon number}                     //changed to byte
   weapon       : string[20]   //{name of weapon}
   seen_master  : boolean      //changed to bool
@@ -84,8 +101,11 @@ Type PlyrRec = Record         //modified from LORD structs
   human_left   : Byte         //{human fights left}                 //changed to byte
   gold         : longint      //{gold in hand}
   bank         : longint      //{gold in bank}
+  int_multi    : real         //Gold Interest Multiplier
   def          : longint      //{total defense points }
+  def_multi    : real         //Defense Multiplier
   strength     : longint      //{total strength}
+  str_multi    : real         //Strength Multiplier
   level        : Byte         //{level of player}                   //changed to byte
   floor        : Byte         //which floor the player is on
   time         : longint      //player last played on}              //changed to longint
@@ -95,6 +115,8 @@ Type PlyrRec = Record         //modified from LORD structs
   exp          : longint      //{experience}
   sex          : Boolean      //changed to bool
   king         : byte         //{# of times player has won game}
+  room         : Boolean      //Staying in Inn
+  items        : Array[1..10] of ritems
 End
 
 type Plyrlist = Record
@@ -159,6 +181,7 @@ Var
   DailyFile : String
   ScoreFile : String
   fScore    : file
+  //items     : ritems
 
 procedure setweapons                   //should be in dat file
 Begin
@@ -388,10 +411,169 @@ Begin
   FindPlyrAlias:=Ret
 End
 
+Function checkitems:byte
+Var
+  y:byte
+  ret:byte=0
+Begin
+  for y:=1 to 10 do
+  Begin
+    if Plyr.items[y].iname = 'None' then
+    Begin
+      ret:=y
+      break
+    End
+  End
+  if ret=0 then checkitems:=0
+  else checkitems:=ret
+  WriteLn(Int2Str(ret))
+End
+
+Function additems(name:string;x:byte):boolean
+Begin
+  WriteLn(Int2Str(x))
+  if x <> 0 then
+  Begin
+    Case upper(name) Of
+      'POTION1': Begin
+                   if Plyr.gold>=20 then
+                   Begin
+                     Plyr.items[x].iname:='Potion1'
+                     Plyr.gold:=Plyr.gold-20
+                     SavePlyr(Plyr.index)
+                     WriteLn('|09     You have purchased '+Plyr.items[x].iname)
+                     WriteLn(pz)
+                     ReadKey
+                   End
+                   Else WriteLn('  |03S|09orry, you don''t have that much gold...')
+                 End
+      'POTION10': Begin
+                   if Plyr.gold>=200 then
+                   Begin
+                     Plyr.items[x].iname:='Potion10'
+                     Plyr.gold:=Plyr.gold-200
+                     SavePlyr(Plyr.index)
+                     WriteLn('|09     You have purchased '+Plyr.items[x].iname)
+                     WriteLn(pz)
+                     ReadKey
+                   End
+                   Else WriteLn('  |03S|09orry, you don''t have that much gold...')
+                End
+      'POTION100': Begin
+                     if Plyr.gold>=2000 then
+                     Begin
+                       Plyr.items[x].iname:='Potion100'
+                       Plyr.gold:=Plyr.gold-2000
+                       SavePlyr(Plyr.index)
+                       WriteLn('|09     You have purchased '+Plyr.items[x].iname)
+                       WriteLn(pz)
+                       ReadKey
+                     End
+                   Else WriteLn('  |03S|09orry, you don''t have that much gold...')
+                   End
+      'POTION1000': Begin
+                     if Plyr.gold>=20000 then
+                     Begin
+                       Plyr.items[x].iname:='Potion1000'
+                       Plyr.gold:=Plyr.gold-20000
+                       SavePlyr(Plyr.index)
+                       WriteLn('|09     You have purchased '+Plyr.items[x].iname)
+                       WriteLn(pz)
+                       ReadKey
+                     End
+                   Else WriteLn('  |03S|09orry, you don''t have that much gold...')
+                   End
+
+    End
+  End
+  Else Begin
+    WriteLn('  |03Y|09ou do not have any room for more items...')
+    WriteLn(pz)
+    ReadKey
+  End
+End
+
+Function finditem(x:string;i:byte):string
+Var
+  ret : string
+Begin
+  Case upper(x) Of
+    'POTION1':   Begin
+                   Plyr.hit_points:=Plyr.hit_points+1
+                   if Plyr.hit_points>Plyr.hit_max+Plyr.hit_multi then Plyr.hit_points:=Plyr.hit_max+Plyr.hit_multi
+                   Plyr.items[i].iname:='None'
+                 End
+    'POTION10':  Begin
+                   Plyr.hit_points:=Plyr.hit_points+10
+                   if Plyr.hit_points>Plyr.hit_max+Plyr.hit_multi then Plyr.hit_points:=Plyr.hit_max+Plyr.hit_multi
+                   Plyr.items[i].iname:='None'
+                 End
+    'POTION100': Begin
+                   Plyr.hit_points:=Plyr.hit_points+100
+                   if Plyr.hit_points>Plyr.hit_max+Plyr.hit_multi then Plyr.hit_points:=Plyr.hit_max+Plyr.hit_multi
+                   Plyr.items[i].iname:='None'
+                 End
+    'POTION1000':Begin
+                   Plyr.hit_points:=Plyr.hit_points+1000
+                   if Plyr.hit_points>Plyr.hit_max+Plyr.hit_multi then Plyr.hit_points:=Plyr.hit_max+Plyr.hit_multi
+                   Plyr.items[i].iname:='None'
+                 End
+  End
+
+  SavePlyr(Plyr.index)
+End
+
+Procedure useitem
+Var
+  x : byte=1
+  ch: Char
+Begin
+  DispFile(rcspath+'useitem.ans')
+  For x:=1 to 10 do
+  Begin
+    WriteXY(8,4+x,3,Plyr.items[x].iname)
+  End
+
+  ch:=upper(OneKey('ABCDEFGHIJ',True))
+  Case ch Of
+    'A':Begin
+          if Plyr.items[1].iname<>'None' then finditem(Plyr.items[1].iname,1)
+        End
+    'B':Begin
+          if Plyr.items[2].iname<>'None' then finditem(Plyr.items[2].iname,2)
+        End
+    'C':Begin
+          if Plyr.items[3].iname<>'None' then finditem(Plyr.items[3].iname,3)
+        End
+    'D':Begin
+          if Plyr.items[4].iname<>'None' then finditem(Plyr.items[4].iname,4)
+        End
+    'E':Begin
+          if Plyr.items[5].iname<>'None' then finditem(Plyr.items[5].iname,5)
+        End
+    'F':Begin
+          if Plyr.items[6].iname<>'None' then finditem(Plyr.items[6].iname,6)
+        End
+    'G':Begin
+          if Plyr.items[7].iname<>'None' then finditem(Plyr.items[7].iname,7)
+        End
+    'H':Begin
+          if Plyr.items[8].iname<>'None' then finditem(Plyr.items[8].iname,8)
+        End
+    'I':Begin
+          if Plyr.items[9].iname<>'None' then finditem(Plyr.items[9].iname,9)
+        End
+    'J':Begin
+          if Plyr.items[10].iname<>'None' then finditem(Plyr.items[10].iname,10)
+        End
+
+  End
+End
+
 Procedure Init                              //Set up files
 Begin
   GetThisUser
-  rcspath:=AddSlash(CfgMPEPath+'rcstdta')
+  rcspath:=AddSlash(CfgMPEPath+'rcstdta1')
   PlyrFile:=rcspath+'rcstdta.ply'
   While ReadPlyr(PlyrCount+1) Do
     PlyrCount:=PlyrCount+1
@@ -488,6 +670,19 @@ begin
   halt
 End
 
+procedure enditroom
+Begin
+  ClrScr
+  WriteLn('|03  Sleeping in Your Room...')
+  WriteLn('|09  -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-')
+  WriteLn('|09  You fall asleep quickly after a nice cup of tea... ')
+  WriteLn('')
+  WriteLn(pz)
+  ReadKey
+  WriteLn('|09  RETURNING TO THE MUNDANE WORLD...|DE|DE|DE')
+  halt
+End
+
 procedure deaduserdaily(name,monster:string)         //User was killed - daily news
 Var ch  : char                                       //these could be combined
 Begin
@@ -516,7 +711,8 @@ Begin
 End
 
 Procedure PlayerStat
-Var ch : char
+Var
+  x  : byte
 Begin
   ClrScr
   DispFile(rcspath+'stats.ans')
@@ -526,29 +722,47 @@ Begin
   Writeln('|[X02|[Y05|09  Level              : |03'+Int2Str(Plyr.level))
   Write('|[X02|[Y06|09  HitPoints          : |03')
   if (Plyr.hit_points<0) then Plyr.hit_points:=0
-  WriteLn(Int2Str(Plyr.hit_points)+'|09 of |03'+Int2Str(Plyr.hit_max))
+  WriteLn(Int2Str(Plyr.hit_points)+'|09 of |03'+Int2Str(Plyr.hit_max+Plyr.hit_multi))
   Writeln('|[X02|[Y07|09  Moves Left         : |03'+Int2Str(Plyr.fights_left))
   WriteLn('|[X02|[Y08|09  Player Fights Left : |03'+Int2Str(Plyr.human_left))
   Writeln('|[X02|[Y09|09  Gold In Hand       : |03'+Int2Str(Plyr.gold))
   WriteLn('|[X02|[Y10|09  Gold In Bank       : |03'+Int2Str(Plyr.bank))
   Writeln('|[X02|[Y11|09  Weapon             : |03'+Plyr.weapon)
-  WriteLn('|[X02|[Y12|09  Attack Strength    : |03'+Int2Str(Plyr.strength))
+  WriteLn('|[X02|[Y12|09  Attack Strength    : |03'+Int2Str(Plyr.strength+Plyr.str_multi))
   Writeln('|[X02|[Y13|09  Armour             : |03'+Plyr.arm)
-  WriteLn('|[X02|[Y14|09  Defensive Strength : |03'+Int2Str(Plyr.def))
+  WriteLn('|[X02|[Y14|09  Defensive Strength : |03'+Int2Str(Plyr.def+Plyr.def_multi))
   Write('|[X02|[Y15|09  Seen Master        : |03')
   if Plyr.seen_master then writeln('Yes') else WriteLn('No')
   WriteLn('|[X02|[Y16|09  Player Floor       : |03'+Int2Str(Plyr.floor))
   WriteLn('|[X02|[Y17|09  Date Last Played   : |03'+DateStr(Plyr.time,1))
   Writeln('|[X02|[Y18|09  Times Won          : |03'+Int2Str(Plyr.king))
+  WriteLn('|[X02|[Y20|09  Items')
+  for x:=1 to 5 do
+  Begin
+    if Plyr.items[x].iname <> 'None' then
+    Begin
+      Write('|09 '+Int2Str(x)+' |03'+Plyr.items[x].iname+' ')
+    End
+  End
+  WriteLn('')
+  for x:=6 to 10 do
+  Begin
+    if Plyr.items[x].iname <> 'None' then
+    Begin
+      Write('|09 '+Int2Str(x)+' |03'+Plyr.items[x].iname+' ')
+    End
+  End
   Write(pz)
-  ch:=readkey
+  readkey
 End
 
 procedure healer                    //heal your player
-Var ch   : char
-Var temp :integer
-Var temp1:integer
-Var z    : char
+Var
+  ch   : char
+  temp :integer
+  temp1:integer
+  tmp  :integer
+  z    : char
 Begin
   ClrScr
   if not FileExist(rcspath+'healers.ans') then
@@ -566,7 +780,7 @@ Begin
   End
   Else DispFile(rcspath+'healers.ans')
   WriteLn('')
-  WriteLn('|09  HitPoints: (|03'+Int2Str(Plyr.hit_points)+'|09 of |03'+Int2Str(Plyr.hit_max)+'|09)  Gold: |03'+Int2Str(Plyr.gold))
+  WriteLn('|09  HitPoints: (|03'+Int2Str(Plyr.hit_points)+'|09 of |03'+Int2Str(Plyr.hit_max+Plyr.hit_multi)+'|09)  Gold: |03'+Int2Str(Plyr.gold))
   WriteLn('|09  (it costs |155 |09 to heal 1 hitpoint')
   WriteLn('')
   WriteLn('|09  The Healers   |02(H,C,R)')
@@ -575,8 +789,9 @@ Begin
   ch:=upper(OneKey('HCR',True))
   Case ch Of
     'H': Begin
-           if Plyr.hit_points<=Plyr.hit_max then
-             temp:=(Plyr.hit_max-Plyr.hit_points)*5
+           tmp:=Plyr.hit_max+Plyr.hit_multi
+           if tmp>=Plyr.hit_points then
+             temp:=((Plyr.hit_max+Plyr.hit_multi)-Plyr.hit_points)*5
            else Begin
              WriteLn('|03  You look fine to me...')
              WriteLn(pz)
@@ -596,7 +811,7 @@ Begin
            End
            if Plyr.gold>=temp then begin
              Plyr.gold:=Plyr.gold-temp
-             Plyr.hit_points:=Plyr.hit_max
+             Plyr.hit_points:=(Plyr.hit_max+Plyr.hit_multi)
            End
            WriteLn('')
            WriteLn(pz)
@@ -608,13 +823,13 @@ Begin
            WriteLn('|15  Healers')
            WriteLn('|09-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-')
            WriteLn('')
-           WriteLn('|09  HitPionts: (|03'+Int2Str(Plyr.hit_points)+'|09 of |03'+Int2Str(Plyr.Hit_max)+'|09) Gold: |03'+Int2Str(Plyr.gold))
+           WriteLn('|09  HitPionts: (|03'+Int2Str(Plyr.hit_points)+'|09 of |03'+Int2Str(Plyr.Hit_max+Plyr.hit_multi)+'|09) Gold: |03'+Int2Str(Plyr.gold))
            WriteLn('|09  (it costs |155|09 to heal 1 hitpoint)')
            WriteLn('')
            WriteLn('|09  "How many hit points would you like healed?"')
            Write('|03  Amount :')
            temp:= Str2Int(Input(30,30,1,''))
-           if Plyr.hit_points+temp <= Plyr.hit_max then begin
+           if Plyr.hit_points+temp <= Plyr.hit_max+Plyr.hit_multi then begin
              if temp*5<=Plyr.gold then begin
                Plyr.gold:=Plyr.gold-(temp*5)
                Plyr.hit_points:=Plyr.hit_points+temp
@@ -668,7 +883,7 @@ Begin
         'A': Begin
                Plyr.seen_master:=true
                PHPoint:=((Plyr.strength/2)+(random(Plyr.strength/2)))-Mstr.def
-               MHPoint:=((Mstr.strength/2)+(random(Mstr.strength/2)))-Plyr.def
+               MHPoint:=((Mstr.strength/2)+(random(Mstr.strength/2)))-(Plyr.def+Plyr.def_multi)
                if PHPoint>0 then
                Begin
                  WriteLn('  You hit '+Mstr.name+' for '+Int2Str(PHPoint)+' damage!')
@@ -731,8 +946,8 @@ Begin
       Plyr.exp:=Plyr.exp+mstr.exp_points
       Plyr.seen_master:=true
       Plyr.level:=Plyr.level+1
-      Plyr.hit_max:=Plyr.hit_max*2
-      Plyr.hit_points:=Plyr.hit_max
+      Plyr.hit_max:=Plyr.hit_max+25
+      Plyr.hit_points:=Plyr.hit_max+Plyr.hit_multi
       Plyr.level:=Plyr.floor
       WriteLn('')
       WriteLn('  '+Mstr.death)
@@ -785,15 +1000,16 @@ Begin
         WriteLn('|09  '+mon.name+'''s Hitpoints : '+Int2Str(mon.hit_points))
         WriteLn('')
         WriteLn('|09  (|03A|09)ttack')
+        WriteLn('|09  (|03U|09)se Item')
         WriteLn('|09  (|03S|09)tats')
         WriteLn('|09  (|03R|09)un')
         WriteLn('')
         Write('|09  Your command, |03'+Plyr.alias+' : ')
-        ch:=Upper(OneKey('ASR',True))
+        ch:=Upper(OneKey('AUSR',True))
         Case ch Of
           'A': Begin
                  PHpoint:=((Plyr.strength/2)+(random(Plyr.strength/2)))
-                 MHPoint:=((mon.strength/2)+(random(mon.strength/2)))-Plyr.def
+                 MHPoint:=((mon.strength/2)+(random(mon.strength/2)))-(Plyr.def+Plyr.def_multi)
                  WriteLn('')
                  WriteLn('|09  You hit '+mon.name+' for '+Int2Str(PHpoint)+' damage!')
                  mon.hit_points:=mon.hit_points-PHPoint
@@ -809,6 +1025,9 @@ Begin
                      WriteLn('|04  ** |03'+mon.name+' |09attacks with its |03'+mon.weapon+' |09and Misses...')
                    End
                  End
+               End
+          'U': Begin
+                 useitem
                End
           'S': Begin
                  PlayerStat
@@ -866,17 +1085,25 @@ Begin
   Plyr.gold:=500
   Plyr.bank:=0
   Plyr.def:=1
+  Plyr.def_multi:=Plyr.def_multi+Plyr.king
+  Plyr.int_multi:=Plyr.int_multi+0.5
   Plyr.strength:=5
+  Plyr.str_multi:=Plyr.str_multi+Plyr.king
   Plyr.level:=1
+<<<<<<< HEAD
+  //Plyr.time:=DateTime
+=======
 <<<<<<< HEAD
   Plyr.time:=DateTime
 =======
 >>>>>>> 111577a... Update install file and added conversion MPL
+>>>>>>> master
   Plyr.arm_num:=Plyr.king+1
   Plyr.arm:=armours[Plyr.arm_num].name
   Plyr.dead:=false
   Plyr.exp:=1
   Plyr.king:=Plyr.king+1
+  Plyr.hit_multi:=Plyr.king
   Plyr.floor:=1
   SavePlyr(Plyr.index)
 End
@@ -967,7 +1194,7 @@ Begin
   WriteLn('|[X05|[Y11|03Y|09ou feel brave and drink it...')
   WriteLn('|[X05|[Y13|03A|09fter drinking it...')
   WriteLn('|[X05|[Y15|03Y|09ou feel refreshed!')
-  Plyr.hit_points:=Plyr.hit_max
+  Plyr.hit_points:=Plyr.hit_max+Plyr.hit_multi
   Plyr.fights_left:=Plyr.fights_left-1
   SavePlyr(Plyr.index)
   WriteLn(pz)
@@ -1179,7 +1406,7 @@ Begin
     Write('|[X59|[Y04|03'+Int2Str(Plyr.floor))
     if Plyr.level=12 then WriteLn('|[X03|[Y08|03(|11O|03)|09pen the final door')
   End
-  WriteLn('|[X05|[Y20|09HitPoints: (|03'+Int2Str(Plyr.hit_points)+'|09 of |03'+Int2Str(Plyr.hit_max)+'|09)  Moves: |03'+Int2Str(Plyr.fights_left)+'|09 Gold: |03'+Int2Str(Plyr.gold))
+  WriteLn('|[X05|[Y20|09HitPoints: (|03'+Int2Str(Plyr.hit_points)+'|09 of |03'+Int2Str(Plyr.hit_max+Plyr.hit_multi)+'|09)  Moves: |03'+Int2Str(Plyr.fights_left)+'|09 Gold: |03'+Int2Str(Plyr.gold))
   WriteLn('|[X05|[Y21|09The Tower - Floor |03'+Int2Str(Plyr.floor)+'    |09(L,H,U,D,R)')
   Write('|[X05|[Y23|03Y|09our command, |03'+Plyr.Alias+'|09? : ')
   ch:=''
@@ -1322,6 +1549,8 @@ Begin
            WriteLn('|[X05|[Y18|09"How much gold would you like to deposit?"')
            Write('|[X05|[Y19|09Amount: ')
            dep:= Str2Int(Input(30,30,1,''))
+           if dep>0 then
+           Begin
            if dep <= Plyr.gold then begin
              Plyr.bank:=Plyr.bank+dep
              Plyr.gold:=Plyr.gold-dep
@@ -1329,6 +1558,8 @@ Begin
              WriteLn('|03         D|09one! |03'+StrComma(dep)+'|09 deposited.')
            End
            Else WriteLn('|03         You don''t have that much...')
+           End
+           Else WriteLn('|03         Deposit needs to be greater than 0 (zero)')
            WriteLn(pz)
            x:=ReadKey
            bank
@@ -1345,6 +1576,8 @@ Begin
            WriteLn('|[X05|[Y18|09"How much gold would you like to withdraw?"')
            Write('|[X05|[Y19|09Amount: ')
            dep:= Str2Int(Input(30,30,1,''))
+           if dep>0 then
+           Begin
            if dep <= Plyr.bank then begin
              Plyr.gold:=Plyr.gold+dep
              Plyr.bank:=Plyr.bank-dep
@@ -1352,6 +1585,8 @@ Begin
              WriteLn('|03          D|09one! |03'+StrComma(dep)+'|03 withdrawn.')
            End
            Else WriteLn('|03          You don''t have that much...')
+           End
+           Else WriteLn('|03          Withdrawl must be greater than 0 (zero)')
            WriteLn(pz)
            x:=ReadKey
            bank
@@ -1582,14 +1817,14 @@ Begin
   WriteLn('|09  Who would you like to attack?')
   Write('|09  Enter their name here: |03')
   FgtInd:=FindPlyrAlias(Input(30,30,1,''))      //finds the index number of user
-  if (ReadLPlyr(FgtInd))and(LPlyr.dead=false)and(LPlyr.index<>Plyr.index) then  //user exists, and isn't dead
+  if (ReadLPlyr(FgtInd))and(LPlyr.dead=false)and(LPlyr.index<>Plyr.index)and(LPlyr.room=false) then  //user exists, and isn't dead
   Begin
     WriteLn('|09 Do you really want to battle |03'+LPlyr.alias+'|09? (Y/N)')
     x:=ReadKey
     if upper(x)='Y' then
     begin
       ReadPlyr(Plyr.index)
-      LPlyr.hit_points:=LPlyr.hit_max
+      LPlyr.hit_points:=LPlyr.hit_max+LPlyr.hit_multi
       WriteLn('|[X05|09You are battling |03'+LPlyr.alias)
       WriteLn('')
       Repeat
@@ -1605,8 +1840,8 @@ Begin
         ch:=Upper(OneKey('ASR',True))
         Case ch Of
           'A': Begin
-                 PHPoint:=((Plyr.strength/2)+(random(Plyr.strength/2)))-(LPlyr.def)
-                 MHPoint:=((LPlyr.strength/2)+(random(LPlyr.strength/2)))-(Plyr.def)
+                 PHPoint:=((Plyr.strength/2)+(random(Plyr.strength/2)))-(LPlyr.def+LPlyr.def_multi)
+                 MHPoint:=((LPlyr.strength/2)+(random(LPlyr.strength/2)))-(Plyr.def+Plyr.def_multi)
                  WriteLn('')
                  if PHPoint>0 then
                  Begin
@@ -1689,6 +1924,7 @@ Begin
   Begin
     if LPlyr.dead=true then WriteLn('|09Cannot fight a dead player.'+pz)
     if LPlyr.index=Plyr.index then WriteLn('|09Why do you want to fight yourself?'+pz)
+    if LPlyr.room=true then WriteLn('|09Your opponent is sleeping at the Bed n Breakfast.')
     ReadKey
   End
 End
@@ -1764,35 +2000,303 @@ Begin
   fClose(fDaily)
 End
 
+procedure room
+Var
+  ch : Char
+Begin
+  DispFile(rcspath+'room.ans')
+  GotoXY(3,21)
+  WriteLn('|03W|09ould you like the room? (Y/N): ')
+  ch:=upper(OneKey('YN',True))
+  if ch='N' then break
+  else Begin
+    If Plyr.gold>500 then begin
+      Plyr.gold:=Plyr.gold-500
+      Plyr.room:=true
+      SavePlyr(Plyr.index)
+      enditroom
+    End
+    Else
+    Begin
+      WriteLn('|03Y|09ou don''t have enough gold...')
+      WriteLn(pz)
+      ReadKey
+    End
+  End
+End
+
+procedure eat                             //Add more items to Restaurant
+Var
+  ch : Char
+  tmp: integer
+Begin
+  DispFile(rcspath+'eat.ans')
+  tmp:=Plyr.level*500
+  WriteXY(66,5,3,Int2Str(tmp)+' gold')
+  GotoXY(3,20)
+  WriteLn('|03W|09ould you like dinner: (Y/N): ')
+  ch:=upper(OneKey('YN',True))
+  if ch='N' then break
+  else Begin
+    if Plyr.gold>=tmp then
+    Begin
+      Plyr.hit_points:=Plyr.hit_max+Plyr.hit_multi
+      Plyr.gold:=Plyr.gold-tmp
+      WriteLn('|03Y|09ou thank your waitress for the fine meal.')
+      SavePlyr(Plyr.index)
+      WriteLn(pz)
+      ReadKey
+    End
+    Else
+    Begin
+      WriteLn('|03Y|09ou don''t have enough gold...')
+      WriteLn(pz)
+      ReadKey
+    End
+  End
+End
+
+procedure shop
+Var
+  ch : Char
+  done : Boolean=false
+Begin
+  Repeat
+    DispFile(rcspath+'shop.ans')
+    GotoXY(3,22)
+    WriteLn('|03W|09hat''s your pleasure |03'+Plyr.Alias+'|09? ')
+    ch:=upper(OneKey('ABCDEFGHR',True))
+    Case ch Of
+      'A': additems('POTION1',checkitems)
+      'B': additems('POTION10',checkitems)
+      'C': additems('POTION100',checkitems)
+      'D': additems('POTION1000',checkitems)
+      //'E':
+      //'F':
+      //'G':
+      //'H':
+      'R':done:=true
+    End
+  Until done
+End
+
+procedure saloon
+Var
+  done : Boolean=false
+  ch   : Char
+  tmp  : byte
+Begin
+  Repeat
+    DispFile(rcspath+'saloon.ans')
+    GotoXY(3,22)
+    WriteLn('|03Y|09our |03C|09ommand, |03'+Plyr.Alias+'|09: ')
+    ch:=upper(OneKey('BWVR',True))
+    Case ch Of
+      'R':done:=true
+      'B':Begin
+            if Plyr.gold>=25 then
+            Begin
+              if random(100)<=20 then Plyr.hit_multi:=Plyr.hit_multi-2
+              Else Plyr.hit_multi:=Plyr.hit_multi+1
+              WriteLn('|03Y|09our Max Hitpoints Modifier is now: '+Int2Str(Plyr.hit_multi))
+              Plyr.gold:=Plyr.gold-25
+              SavePlyr(Plyr.index)
+              ReadKey
+            End
+          End
+      'W':Begin
+            if Plyr.gold>=150 then
+            Begin
+              if random(100)<=20 then Plyr.str_multi:=Plyr.str_multi-2
+              Else Plyr.str_multi:=Plyr.str_multi+1
+              WriteLn('|03Y|09our Strength Modifier is now: '+Int2Str(Plyr.str_multi))
+              Plyr.gold:=Plyr.gold-150
+              SavePlyr(Plyr.index)
+              ReadKey
+            End
+          End
+      'V':Begin
+            if Plyr.gold>=1000 then
+            Begin
+              if random(100)<=20 then Plyr.def_multi:=Plyr.def_multi-2
+              Else Plyr.def_multi:=Plyr.def_multi+1
+              WriteLn('|03Y|09our Defense Modifier is now: '+Int2Str(Plyr.def_multi))
+              Plyr.gold:=Plyr.gold-1000
+              SavePlyr(Plyr.index)
+              ReadKey
+            End
+          End
+    End
+  Until done
+End
+
+procedure hilo
+Var
+  ch   : Char
+  x    : byte
+  y    : byte
+  z    : integer
+  done : Boolean=false
+  limit: integer
+Begin
+  Repeat
+    ClrScr
+    DispFile(rcspath+'hilo.ans')
+    GotoXY(3,20)
+    limit:=Plyr.level*500
+    WriteLn('|[X60|[Y20|03T|09able Limit: |03'+Int2Str(limit))
+    WriteLn('|[X40|[Y20|03Y|09our gold: |03'+Int2Str(Plyr.gold))
+    WriteLn('|[X02|[Y20|03P|09lace your bet: ')
+    z:=Str2Int(Input(30,30,1,''))
+    if z=0 then break
+    if (z<=Plyr.gold)and(z>0)and(z<=limit) then
+    Begin
+      x:=random(13)+1
+      WriteLn('|[X25|[Y14|16      ')
+      WriteLn('|[X25|[Y15|16      ')
+      WriteLn('|[X25|[Y16|16      ')
+      WriteLn('|[X25|[Y17|16      ')
+      Case x Of
+      10 : WriteLn('|[X25|[Y14|1510|[X29|[Y17|1510')
+      11 : WriteLn('|[X25|[Y14|15J|[X30|[Y17|15J')
+      12 : WriteLn('|[X25|[Y14|15Q|[X30|[Y17|15Q')
+      13 : WriteLn('|[X25|[Y14|15K|[X30|[Y17|15K')
+      1  : WriteLn('|[X25|[Y14|15A|[X30|[Y17|15A')
+      2  : WriteLn('|[X25|[Y14|15'+Int2Str(x)+'|[X30|[Y17|15'+Int2Str(x))
+      3  : WriteLn('|[X25|[Y14|15'+Int2Str(x)+'|[X30|[Y17|15'+Int2Str(x))
+      4  : WriteLn('|[X25|[Y14|15'+Int2Str(x)+'|[X30|[Y17|15'+Int2Str(x))
+      5  : WriteLn('|[X25|[Y14|15'+Int2Str(x)+'|[X30|[Y17|15'+Int2Str(x))
+      6  : WriteLn('|[X25|[Y14|15'+Int2Str(x)+'|[X30|[Y17|15'+Int2Str(x))
+      7  : WriteLn('|[X25|[Y14|15'+Int2Str(x)+'|[X30|[Y17|15'+Int2Str(x))
+      8  : WriteLn('|[X25|[Y14|15'+Int2Str(x)+'|[X30|[Y17|15'+Int2Str(x))
+      9  : WriteLn('|[X25|[Y14|15'+Int2Str(x)+'|[X30|[Y17|15'+Int2Str(x))
+      Else WriteLn('|[X25|[Y14'+Int2Str(x))
+      End
+      GotoXY(1,21)
+      WriteLn('|03D|09o you think the next card will be |03H|09igher or |03L|09ower? ')
+      ch:=upper(OneKey('HL',False))
+      y:=random(13)+1
+      WriteLn('|[X45|[Y14|16      ')
+      WriteLn('|[X45|[Y15|16      ')
+      WriteLn('|[X45|[Y16|16      ')
+      WriteLn('|[X45|[Y17|16      ')
+      Case y Of
+      10 : WriteLn('|[X45|[Y14|1510|[X49|[Y17|1510')
+      11 : WriteLn('|[X45|[Y14|15J|[X50|[Y17|15J')
+      12 : WriteLn('|[X45|[Y14|15Q|[X50|[Y17|15Q')
+      13 : WriteLn('|[X45|[Y14|15K|[X50|[Y17|15K')
+      1  : WriteLn('|[X45|[Y14|15A|[X50|[Y17|15A')
+      2  : WriteLn('|[X45|[Y14|15'+Int2Str(y)+'|[X50|[Y17|15'+Int2Str(y))
+      3  : WriteLn('|[X45|[Y14|15'+Int2Str(y)+'|[X50|[Y17|15'+Int2Str(y))
+      4  : WriteLn('|[X45|[Y14|15'+Int2Str(y)+'|[X50|[Y17|15'+Int2Str(y))
+      5  : WriteLn('|[X45|[Y14|15'+Int2Str(y)+'|[X50|[Y17|15'+Int2Str(y))
+      6  : WriteLn('|[X45|[Y14|15'+Int2Str(y)+'|[X50|[Y17|15'+Int2Str(y))
+      7  : WriteLn('|[X45|[Y14|15'+Int2Str(y)+'|[X50|[Y17|15'+Int2Str(y))
+      8  : WriteLn('|[X45|[Y14|15'+Int2Str(y)+'|[X50|[Y17|15'+Int2Str(y))
+      9  : WriteLn('|[X45|[Y14|15'+Int2Str(y)+'|[X50|[Y17|15'+Int2Str(y))
+      Else WriteLn('|[X45|[Y14'+Int2Str(y))
+      End
+      if ((y>x)and(ch='H'))or((y<x)and(ch='L')) then
+      Begin
+        GotoXY(1,22)
+        WriteLn('You WiN!')
+        Plyr.gold:=Plyr.gold+z
+        SavePlyr(Plyr.index)
+      End
+      Else
+      Begin
+        GotoXY(1,22)
+        WriteLn('Sorry, You lose...')
+        Plyr.gold:=Plyr.gold-z
+        SavePlyr(Plyr.index)
+      End
+
+    End
+    Else WriteLn('|03Y|09ou don''t have that much gold...')
+    WriteLn(pz)
+    ReadKey
+  Until done
+End
+
+procedure gamble
+Var
+  ch   : Char
+  done : Boolean=false
+Begin
+  Repeat
+    DispFile(rcspath+'gamble.ans')                       //Gambling room goes here... :)
+    GotoXY(3,20)
+    WriteLn('|03W|09hat''s your game of choice, |03'+Plyr.alias+'|09: ')
+    ch:=upper(OneKey('RH',False))
+    Case ch Of
+      'R':done:=true
+      'H':hilo
+
+    End
+  Until done
+End
+
+procedure bnb
+Var
+  done: Boolean=false
+  ch  : char
+Begin
+  // get a room, eat at diner, shop, gamble, etc
+  Repeat
+    DispFile(rcspath+'bnb.ans')
+    GotoXY(3,19)
+    WriteLN('|03Y|09our |03C|09ommand, |03'+Plyr.Alias+'|09:')
+    ch:=upper(OneKey('BESGDR',True))
+    Case ch Of
+      'R':done:=true
+      'B':room
+      'E':eat
+      'S':shop
+      'G':gamble
+      'D':saloon
+    End
+  Until done
+End
+
 procedure town
 Var
   ch : char
   x  : char
 Begin
+  Plyr.seen_master:=false
   If (Plyr.hit_points<=0)or(Plyr.dead) then
   Begin
     WriteLn('       You''re Dead. Come back again tomorrow and try again.')
-    //Plyr.hit_points:=Plyr.hit_max         //put in place for testing
-    WriteLn(pz)
-    Plyr.dead:=true                         //change to false for testing
-    Plyr.gold:=0
+    Plyr.hit_points:=100
+    //Plyr.hit_points:=Plyr.hit_max+Plyr.hit_multi  //put in place for testing
+    //WriteLn(pz)
+    Plyr.dead:=false                         //change to false for testing
+    Plyr.gold:=50000000
     SavePlyr(Plyr.index)
     ch:=ReadKey
-    endit                                   //comment out for testing
+    //endit                                   //comment out for testing
   End
   ClrScr
+<<<<<<< HEAD
+  //Plyr.time:=datetime
+=======
 <<<<<<< HEAD
   Plyr.time:=datetime
 =======
 >>>>>>> 111577a... Update install file and added conversion MPL
+>>>>>>> master
   SavePlyr(Plyr.index)
   DispFile(rcspath+'town.ans')
   WriteLn('')
   Write('|03  Y|09our command, |03'+Plyr.Alias+' : ')
-  ch := upper(OneKey('FAKDLHVQYU',True))
+  ch := upper(OneKey('FBAKDLHVQYU',True))
   Case ch Of
     'F': Begin
            forest
+           town
+         End
+    'B': Begin
+           bnb
            town
          End
     'A': Begin
@@ -1844,10 +2348,34 @@ Begin
     fClose(fDaily)
 End
 
+procedure displayscreens
+Begin
+  DispFile(rcspath+'beach')
+  WriteLn(pz)
+  ReadKey
+  ClrScr
+  DispFile(rcspath+'intro.ans')
+  WriteLn(pz)
+  ReadKey
+  ClrScr
+  DispFile(rcspath+'3doors.ans')
+  WriteLn(pz)
+  ReadKey
+  ClrScr
+  playerstat
+  ClrScr
+  dailynews
+  ClrScr
+  town
+End
+
 procedure setstats           //sets the initial stats for new user
+Var
+  x : byte
 Begin
   Plyr.hit_points:=20
   Plyr.hit_max:=20
+  Plyr.hit_multi:=0
   Plyr.weapon_num:=Plyr.king+1
   Plyr.weapon:=weapons[Plyr.weapon_num].name
   Plyr.seen_master:=false
@@ -1855,8 +2383,11 @@ Begin
   Plyr.human_left:=dailyhumanfights
   Plyr.gold:=500
   Plyr.bank:=0
+  Plyr.int_multi:=1
   Plyr.def:=1
+  Plyr.def_multi:=0
   Plyr.strength:=5
+  Plyr.str_multi:=0
   Plyr.level:=1
   Plyr.time:=DateTime
   Plyr.arm_num:=Plyr.king+1
@@ -1865,6 +2396,7 @@ Begin
   Plyr.exp:=1
   Plyr.king:=0
   Plyr.floor:=1
+  for x:=1 to 10 do Plyr.items[x].iname:='None'
   SavePlyr(Plyr.index)
 End
 
@@ -1892,22 +2424,14 @@ begin
   if ch=upper('M')then Plyr.sex:=true
   else Plyr.sex:=false
   WriteLn('')
-  WriteLn('|09With a name like "|03'+Plyr.Alias+'|09", no one is going to believe it.')
+  WriteLn('|09With a name like "|03'+Plyr.Alias+'|09", no one is going to believe it.|DE')
   WriteLn('')
+  WriteLn('|03'+Plyr.Alias+'|09, you can pull your pants back up now...|DE')
   WriteLn(pz)
   ch:=ReadKey
   setstats
   newuserdaily(Plyr.Alias)
-  DispFile(rcspath+'beach')
-  WriteLn('|[X01|[Y23'+pz)
-  Ch:=ReadKey
-  ClrScr
-  DispFile(rcspath+'intro.ans')
-  WriteLn(pz)
-  ch:=ReadKey
-  playerstat
-  dailynews
-  town
+  displayscreens
  End
 
 procedure Apply
@@ -1958,10 +2482,17 @@ Begin
 End
 
 procedure checkdate              //compares today's date with last time player was in game
+Var
+  x : byte
 Begin
   if datecheck(DateTime,Plyr.time) then
   Begin
     Plyr.seen_master:=false
+<<<<<<< HEAD
+    Plyr.time:=DateTime
+    Plyr.fights_left:=25
+    Plyr.human_left:=5
+=======
 <<<<<<< HEAD
     Plyr.fights_left:=25
     Plyr.human_left:=5
@@ -1970,14 +2501,21 @@ Begin
     Plyr.time:=DateTime
     Plyr.fights_left:=dailyfights
     Plyr.human_left:=dailyhumanfights
+>>>>>>> master
     Plyr.hit_multi:=0
     Plyr.str_multi:=0
     Plyr.def_multi:=0
     //Plyr.hit_max:=Plyr.hit_max
     Plyr.hit_points:=Plyr.hit_max+Plyr.hit_multi
+<<<<<<< HEAD
+=======
 >>>>>>> 111577a... Update install file and added conversion MPL
+>>>>>>> master
     Plyr.dead:=false
-    Plyr.bank:=Plyr.bank+(Plyr.bank/10)
+    Plyr.bank:=Plyr.bank+(Plyr.bank*Plyr.int_multi)
+    if Plyr.gold<0 then Plyr.gold:=0
+    if Plyr.bank<0 then Plyr.bank:=0
+    for x:=1 to 10 do Plyr.items[x].iname:='None'
     SavePlyr(Plyr.Index)
   End
 End
@@ -2012,9 +2550,7 @@ Begin
                checkdate
                setweapons
                setarmour
-               playerstat
-               dailynews
-               town
+               displayscreens
              End
              Else Begin
                setweapons
