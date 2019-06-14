@@ -1,7 +1,19 @@
 Place weapons/armour in data file
 Find out about IGM support
-Menus need repeat-until loops
 InterBBS support?
+<<<<<<< HEAD
+=======
+Add items to Restaurant
+Add items to shop
+Random items add to tower
+Random people to town
+People would want specific items for bonus
+Put items into database, and reference via index number in plyr record
+Increase number of items which can be carried
+Add Pawn Shop, where player can sell items
+Add events which will need specific items
+Give some items a 'use' for the player... (add hp or str?)
+>>>>>>> 111577a... Update install file and added conversion MPL
 
 
 -=>require player file update<=-
