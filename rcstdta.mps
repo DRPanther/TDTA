@@ -1,6 +1,16 @@
 //
+<<<<<<< HEAD
 //  Program: The Dark Tower Adventures v0.06a
 //     Date: 06/13/2019
+=======
+<<<<<<< HEAD
+//  Program: The Dark Tower Adventures v0.05a
+//     Date: 05/27/2019
+=======
+//  Program: The Dark Tower Adventures v0.06a
+//     Date: 06/13/2019
+>>>>>>> 111577a... Update install file and added conversion MPL
+>>>>>>> master
 //   Author: Dan Richter, aka Black Panther of Castle Rock BBS
 //  Contact: Black Panther at Castle Rock BBS
 //   telnet://bbs.castlerockbbs.com
@@ -33,12 +43,12 @@
 //  Some   Create ansi screens
 //  Done   Possibly add player fights
 //  Done?  Equalize the stats for Masters - Gets too difficult too fast
-//         Add an Inn, or somewhere for users to get a room to sleep
+//  Done   Add an Inn, or somewhere for users to get a room to sleep
 //            Will require a reset as player file will be updated
 //            or write a script to update player records
 //  Done   Add defense to Masters
 //  Done   Generate a score file output
-//         Menus should be in a repeat-until loop
+//  Some   Menus should be in a repeat-until loop
 //         See if I can figure out how to add IGM support
 //  Done   Add some benefit to having beaten the game... Interest multiplier
 //         Add help screens
@@ -52,10 +62,19 @@ Const
   dailyfights = 50
   dailyhumanfights = 5
 
+<<<<<<< HEAD
 type ritems = Record
   iname       : string
   ihit_points : integer
   ihit_max    : integer
+=======
+<<<<<<< HEAD
+=======
+type ritems = Record
+  iname       : string
+  ihit_points : integer
+  ihit_max    : integer  //Remove - Don't change the hit_max variable...
+>>>>>>> master
   ihit_multi  : real
   ifights_left: byte
   ihuman_left : byte
@@ -63,6 +82,10 @@ type ritems = Record
   idef_multi  : real
   istr_multi  : real
 End
+<<<<<<< HEAD
+=======
+>>>>>>> 111577a... Update install file and added conversion MPL
+>>>>>>> master
 
 Type PlyrRec = Record         //modified from LORD structs
   Index        : Integer      //index number for storing player data
@@ -851,10 +874,11 @@ Begin
       WriteLn('')
       WriteLn('|09  (|03A|01)ttack')
       WriteLn('|09  (|03S|01)tats')
+      WriteLn('|09  (|03U|01)se Item')
       WriteLn('|09  (|03R|01)un')
       WriteLn('')
       Write('|09  Your command: ')
-      ch:=Upper(OneKey('ASR',True))
+      ch:=Upper(OneKey('ASUR',True))
       Case ch Of
         'A': Begin
                Plyr.seen_master:=true
@@ -888,6 +912,9 @@ Begin
         'S': Begin
                PlayerStat
                ClrScr
+             End
+        'U': Begin
+               useitem
              End
         'R': Begin
                If Random(100)<=30 then break
@@ -1063,7 +1090,14 @@ Begin
   Plyr.strength:=5
   Plyr.str_multi:=Plyr.str_multi+Plyr.king
   Plyr.level:=1
+<<<<<<< HEAD
   //Plyr.time:=DateTime
+=======
+<<<<<<< HEAD
+  Plyr.time:=DateTime
+=======
+>>>>>>> 111577a... Update install file and added conversion MPL
+>>>>>>> master
   Plyr.arm_num:=Plyr.king+1
   Plyr.arm:=armours[Plyr.arm_num].name
   Plyr.dead:=false
@@ -1294,9 +1328,9 @@ End
 
 
 procedure foundgold
-Var ch   : char
-Var temp :word=0
-Var temp1:word=0
+Var
+  temp :word=0
+  temp1:word=0
 Begin
   ClrScr
   if not FileExist(rcspath+'evntgold.ans') then WriteLn('|X[05|[Y05|09While looking around the room, you find...|DE|DE|DE')
@@ -1309,13 +1343,14 @@ Begin
   Plyr.fights_left:=Plyr.fights_left-1
   SavePlyr(Plyr.index)
   WriteLn('|[X01|[Y23'+pz)
-  ch:=ReadKey
+  ReadKey
 End
 
 procedure losegold
-Var ch   : char
-Var temp :word=0
-Var temp1:word=0
+Var
+  ch   : char
+  temp :word=0
+  temp1:word=0
 Begin
   ClrScr
   if not FileExist(rcspath+'evntgold.ans') then WriteLn('|X[05|[Y05|09While looking around the room, you find...|DE|DE|DE')
@@ -1328,7 +1363,7 @@ Begin
   Plyr.fights_left:=Plyr.fights_left-1
   SavePlyr(Plyr.index)
   WriteLn('|[X01|[Y23'+pz)
-  ch:=ReadKey
+  ReadKey
 End
 
 procedure forest                            //Needs better ANSI
@@ -1457,6 +1492,7 @@ Begin
                        losearmour
                        ran:=true
                        End
+              //enter random item event here
              End
              if not ran then monfight
              ch:=''
@@ -2241,7 +2277,14 @@ Begin
     //endit                                   //comment out for testing
   End
   ClrScr
+<<<<<<< HEAD
   //Plyr.time:=datetime
+=======
+<<<<<<< HEAD
+  Plyr.time:=datetime
+=======
+>>>>>>> 111577a... Update install file and added conversion MPL
+>>>>>>> master
   SavePlyr(Plyr.index)
   DispFile(rcspath+'town.ans')
   WriteLn('')
@@ -2445,14 +2488,29 @@ Begin
   if datecheck(DateTime,Plyr.time) then
   Begin
     Plyr.seen_master:=false
+<<<<<<< HEAD
     Plyr.time:=DateTime
     Plyr.fights_left:=25
     Plyr.human_left:=5
+=======
+<<<<<<< HEAD
+    Plyr.fights_left:=25
+    Plyr.human_left:=5
+    Plyr.hit_points:=Plyr.hit_max
+=======
+    Plyr.time:=DateTime
+    Plyr.fights_left:=dailyfights
+    Plyr.human_left:=dailyhumanfights
+>>>>>>> master
     Plyr.hit_multi:=0
     Plyr.str_multi:=0
     Plyr.def_multi:=0
     //Plyr.hit_max:=Plyr.hit_max
     Plyr.hit_points:=Plyr.hit_max+Plyr.hit_multi
+<<<<<<< HEAD
+=======
+>>>>>>> 111577a... Update install file and added conversion MPL
+>>>>>>> master
     Plyr.dead:=false
     Plyr.bank:=Plyr.bank+(Plyr.bank*Plyr.int_multi)
     if Plyr.gold<0 then Plyr.gold:=0

@@ -1,14 +1,36 @@
+<<<<<<< HEAD
 v0.01a
 Opened officially for early alpha testing
 
 v0.02a
+=======
+<<<<<<< HEAD
+01Jun v0.01a
+Opened officially for early alpha testing
+
+02Jun v0.02a
+=======
+v0.01a fixes and additions
+Opened officially for early alpha testing
+
+v0.02a fixes and additions
+>>>>>>> 111577a... Update install file and added conversion MPL
+>>>>>>> master
 The (S)tats are now available from the fight menu
 Colors should now be easier to read
 Corrected incorrect information being shown during random events
 Increased the chances of random events (good and bad)
 Assorted bug fixes
 
+<<<<<<< HEAD
 v0.03a
+=======
+<<<<<<< HEAD
+03Jun v0.03a
+=======
+v0.03a fixes and additions
+>>>>>>> 111577a... Update install file and added conversion MPL
+>>>>>>> master
 Added user battles!
 Fixed cosmetic error in finding/losing health via random events
 Changed loseweapon and losearmour random events to just degrade one level
@@ -16,7 +38,15 @@ Added enemy attack when player tries to run away from battle
 Changed the date check to check for month and year
 Added interest to the gold in bank (Not daily, but added each day the player plays)
 
+<<<<<<< HEAD
 v0.04a
+=======
+<<<<<<< HEAD
+04Jun v0.04a
+=======
+v0.04a fixes and additions
+>>>>>>> 111577a... Update install file and added conversion MPL
+>>>>>>> master
 Added ANSI screen for daily news. (It's a newspaper)
 Changed the color of the text to display on daily news
 Added 'Last Play' date to the stats screen
@@ -30,7 +60,15 @@ Fixed issue in weapon/armour shops where it would force player out after selling
 Changed the color of the 'DEAD' indication on the user listings
 Fixed issue with having to hit 'R' multiple times to exit the tower
 
+<<<<<<< HEAD
 v0.05a
+=======
+<<<<<<< HEAD
+06Jun v0.05a
+=======
+v0.05a fixes and additions
+>>>>>>> 111577a... Update install file and added conversion MPL
+>>>>>>> master
 found bug where user could fight themselves to gain exp - fixed
 Added info to player as to why they can't fight certain users
 Added score file output in ascii format
@@ -42,6 +80,11 @@ Reduced the number of turns per day to 25
 Reduced the number of human fights per day to 5
 Added some incentive for players who beat the game - higher weapon/armour on restart
 If player died while fighting master, it would keep the player at the higher floor.
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> master
 Fixed bug that wasn't creating the daily news file if it wasn't already there
 Wrote an MPL that will convert the player data file to the new format! :)
 Added interest mulitplier for players who have finished the game
@@ -58,4 +101,11 @@ Added Gambling room - gamble with your gold
 Fixed negative number bug in the bank deposit and withdrawl system (sorry) :)
 Fixed typos in multiple places within game...
 Modified when DateTime was being saved to user data
+<<<<<<< HEAD
+=======
+Added 'Use Item' to Master fight
+
+v0.06a fixes and additions
+>>>>>>> 111577a... Update install file and added conversion MPL
+>>>>>>> master
 
