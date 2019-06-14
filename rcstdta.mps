@@ -1,5 +1,5 @@
 //
-//  Program: The Dark Tower Adventures
+//  Program: The Dark Tower Adventures v0.05a
 //     Date: 05/27/2019
 //   Author: Dan Richter, aka Black Panther of Castle Rock BBS
 //  Contact: Black Panther at Castle Rock BBS
