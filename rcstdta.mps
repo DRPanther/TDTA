@@ -1344,7 +1344,6 @@ Var
   done:Boolean=false
 Begin
   ClrScr
-  //Plyr.seen_master:=false
   If Plyr.hit_points<=0 then            // Comment out for testing
   Begin
     WriteLn('           |09You''re Dead. Come back again tomorrow and try')
@@ -1471,7 +1470,6 @@ Begin
              WriteLn('')
              WriteLn('|09  You are out of moves for today.')
              WriteLn('')
-             //Plyr.fights_left:=Plyr.fights_left+50
              WriteLn(pz)
              x:=ReadKey
              done:=true
@@ -2232,18 +2230,18 @@ Var
   ch : char
   x  : char
 Begin
-  Plyr.seen_master:=false
+  //Plyr.seen_master:=false
   If (Plyr.hit_points<=0)or(Plyr.dead) then
   Begin
     WriteLn('       You''re Dead. Come back again tomorrow and try again.')
-    Plyr.hit_points:=100
+    //Plyr.hit_points:=100
     //Plyr.hit_points:=Plyr.hit_max+Plyr.hit_multi  //put in place for testing
     //WriteLn(pz)
-    Plyr.dead:=false                         //change to false for testing
-    Plyr.gold:=50000000
+    Plyr.dead:=true                         //change to false for testing
+    //Plyr.gold:=50000000
     SavePlyr(Plyr.index)
     ch:=ReadKey
-    //endit                                   //comment out for testing
+    endit                                   //comment out for testing
   End
   ClrScr
   SavePlyr(Plyr.index)
