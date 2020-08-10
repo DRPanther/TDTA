@@ -1,4 +1,5 @@
 //program tdtaconv;
+// This is the conversion program for converting user records to new version
 
 type ritems = Record
   iname       : string
